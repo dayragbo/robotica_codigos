@@ -1,0 +1,26 @@
+#define pinoR 11 //PINO DIGITAL EM QUE O TERMINAL 'R' ESTÁ CONECTADO
+#define pinoG 10 //PINO DIGITAL EM QUE O TERMINAL 'G' ESTÁ CONECTADO
+#define pinoB 9 //PINO DIGITAL EM QUE O TERMINAL 'B' ESTÁ CONECTADO
+
+void setup() {
+  pinMode(pinoR, OUTPUT);
+  pinMode(pinoG, OUTPUT);
+  pinMode(pinoB, OUTPUT);
+}
+
+void loop() {
+  analogWrite(pinoR, 255); //DEFINE O BRILHO DO LED DE ACORDO COM O VALOR INFORMADO PELA VARIÁVEL 'vermelho'
+  analogWrite(pinoG, 0); //DEFINE O BRILHO DO LED DE ACORDO COM O VALOR INFORMADO PELA VARIÁVEL 'verde'
+  analogWrite(pinoB, 0); //DEFINE O BRILHO DO LED DE ACORDO COM O VALOR INFORMADO PELA VARIÁVEL 'azul'
+  delay(1000); //INTERVALO DE 1 SEGUNDO
+
+  analogWrite(pinoR, 0);
+  analogWrite(pinoG, 255);
+  analogWrite(pinoB, 0);
+  delay(1000);
+
+  analogWrite(pinoR, 0);
+  analogWrite(pinoG, 0);
+  analogWrite(pinoB, 255);
+  delay(1000);
+}
