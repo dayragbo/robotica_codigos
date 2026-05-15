@@ -1,0 +1,129 @@
+// Configuração para cátodo comum
+#define liga HIGH
+#define desliga LOW
+
+// Definição dos pinos dos segmentos
+#define a 8
+#define b 9
+#define c 3
+#define d 4
+#define e 5
+#define f 7
+#define g 6
+#define ponto 2
+
+// Pino do botão
+#define botao 10
+
+// Variáveis para controlar o estado e o botão
+int letraAtual = 0; // 0=A, 1=B, 2=C, 3=D, 4=E, 5=F
+int estadoBotaoAnterior = HIGH; // Armazena o último estado do botão
+
+void setup() {
+  pinMode(a, OUTPUT); pinMode(b, OUTPUT); pinMode(c, OUTPUT); pinMode(d, OUTPUT);
+  pinMode(e, OUTPUT); pinMode(f, OUTPUT); pinMode(g, OUTPUT); pinMode(ponto, OUTPUT);
+
+  // Configura o pino do botão como entrada com resistor de pull-up interno.
+  // Isso significa que o pino lerá HIGH quando o botão não estiver pressionado
+  // e LOW quando estiver pressionado. Não precisa de resistor externo.
+  pinMode(botao, INPUT_PULLUP);
+
+  // Mostra a primeira letra ao iniciar
+  mostrarLetra();
+}
+
+void loop() {
+  // Lê o estado atual do botão
+  int estadoBotaoAtual = digitalRead(botao);
+
+  // Verifica se o botão foi pressionado
+  // (a leitura anterior era HIGH e a atual é LOW)
+  if (estadoBotaoAnterior == HIGH && estadoBotaoAtual == LOW) {
+
+    // Aguarda um pequeno instante para evitar o "debounce" do botão
+    // (leituras falsas quando o botão é pressionado/solto)
+    delay(50);
+
+    // Avança para a próxima letra
+    letraAtual++;
+
+    // Se passar da última letra (F, que é o estado 5), volta para a primeira (A)
+    if (letraAtual > 5) {
+      letraAtual = 0;
+    }
+
+    // Chama a função para mostrar a letra correspondente
+    mostrarLetra();
+  }
+
+  // Atualiza o estado anterior do botão para a próxima iteração do loop
+  estadoBotaoAnterior = estadoBotaoAtual;
+}
+
+// Função central que decide qual letra mostrar
+void mostrarLetra() {
+  limpar(); // Limpa o display antes de mostrar a nova letra
+  switch (letraAtual) {
+    case 0:
+      mostrarA();
+      break;
+    case 1:
+      mostrarB();
+      break;
+    case 2:
+      mostrarC();
+      break;
+    case 3:
+      mostrarD();
+      break;
+    case 4:
+      mostrarE();
+      break;
+    case 5:
+      mostrarF();
+      break;
+  }
+}
+
+// Funções para cada letra (permanecem as mesmas)
+void mostrarA() {
+  digitalWrite(a, liga); digitalWrite(b, liga); digitalWrite(c, liga);
+  digitalWrite(e, liga); digitalWrite(f, liga); digitalWrite(g, liga);
+  digitalWrite(d, desliga);
+}
+
+void mostrarB() {
+  digitalWrite(c, liga); digitalWrite(d, liga); digitalWrite(e, liga);
+  digitalWrite(f, liga); digitalWrite(g, liga);
+  digitalWrite(a, desliga); digitalWrite(b, desliga);
+}
+
+void mostrarC() {
+  digitalWrite(a, liga); digitalWrite(d, liga); digitalWrite(e, liga);
+  digitalWrite(f, liga);
+  digitalWrite(b, desliga); digitalWrite(c, desliga); digitalWrite(g, desliga);
+}
+
+void mostrarD() {
+  digitalWrite(b, liga); digitalWrite(c, liga); digitalWrite(d, liga);
+  digitalWrite(e, liga); digitalWrite(g, liga);
+  digitalWrite(a, desliga); digitalWrite(f, desliga);
+}
+
+void mostrarE() {
+  digitalWrite(a, liga); digitalWrite(d, liga); digitalWrite(e, liga);
+  digitalWrite(f, liga); digitalWrite(g, liga);
+  digitalWrite(b, desliga); digitalWrite(c, desliga);
+}
+
+void mostrarF() {
+  digitalWrite(a, liga); digitalWrite(e, liga); digitalWrite(f, liga);
+  digitalWrite(g, liga);
+  digitalWrite(b, desliga); digitalWrite(c, desliga); digitalWrite(d, desliga);
+}
+
+void limpar() {
+  digitalWrite(a, desliga); digitalWrite(b, desliga); digitalWrite(c, desliga);
+  digitalWrite(d, desliga); digitalWrite(e, desliga); digitalWrite(f, desliga);
+  digitalWrite(g, desliga); digitalWrite(ponto, desliga);
+}
