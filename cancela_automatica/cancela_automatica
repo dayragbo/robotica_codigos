@@ -1,0 +1,55 @@
+#include <Servo.h>
+
+// Definir os pinos
+const int trigPin = 9;
+const int echoPin = 10;
+const int ledMovimento = 11; // LED acende quando há movimento
+const int ledSemMovimento = 12; // LED acende quando não há movimento
+Servo meuServo;
+
+// Definir constantes
+long duracao;
+int distancia;
+int distanciaMax = 20; // Ajustar conforme a necessidade (em cm)
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(ledMovimento, OUTPUT);
+  pinMode(ledSemMovimento, OUTPUT);
+  meuServo.attach(6); // Pino do servo
+  meuServo.write(90); // Inicializar na posição de 90 graus
+  digitalWrite(ledSemMovimento, HIGH); // Inicialmente o LED sem movimento está aceso
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Enviar pulso ultrassônico
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  // Receber pulso ultrassônico
+  duracao = pulseIn(echoPin, HIGH);
+  
+  // Calcular distância em cm
+  distancia = duracao * 0.034 / 2;
+  
+  Serial.print("Distância: ");
+  Serial.println(distancia);
+  
+  // Verificar se há movimento dentro da distância máxima
+  if (distancia <= distanciaMax && distancia > 0) {
+    meuServo.write(180); // Mover o servo para 180 graus
+    digitalWrite(ledMovimento, HIGH); // Acender LED de movimento detectado
+    digitalWrite(ledSemMovimento, LOW); // Apagar o LED sem movimento
+  } else {
+    meuServo.write(90); // Retornar o servo para 90 graus
+    digitalWrite(ledMovimento, LOW); // Apagar o LED de movimento detectado
+    digitalWrite(ledSemMovimento, HIGH); // Acender o LED sem movimento
+  }
+  
+  delay(1000); // Pequena pausa para evitar flutuações rápidas
+}
