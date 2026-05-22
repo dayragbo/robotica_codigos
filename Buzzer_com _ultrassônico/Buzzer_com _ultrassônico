@@ -1,0 +1,33 @@
+//Define as portas com as respectivas palavras
+#define TRIG 11
+#define ECHO 10
+
+void setup()
+{
+  //Buzzer conectado na porta 13
+  pinMode(13, OUTPUT);
+  //Inicializa o serial
+  Serial.begin(9600);
+  //Inicializa a porta TRIG como output e ECHO como input
+  pinMode(TRIG, OUTPUT);
+  pinMode(ECHO, INPUT);
+}
+
+void loop()
+{
+  //Inicializa a variável pra guardar a distância
+  long int distancia = 0;
+  //Sequência de comandos para enviar o sinal
+  digitalWrite(TRIG, LOW);
+  delayMicroseconds(2); // Esperar por 2 microsegundos
+  digitalWrite(TRIG, HIGH);
+  delayMicroseconds(10); // Esperar por 2 microsegundos
+  digitalWrite(TRIG, LOW);
+  //Recebe o sinal em microsegundos e converte para cm
+  distancia = 0.01723 * pulseIn(ECHO, HIGH);
+  Serial.println(distancia);
+
+  //Liga o buzzer com distância menor que 30cm
+  if(distancia<30) digitalWrite(13, HIGH);
+  else digitalWrite(13, LOW);
+}
