@@ -1,0 +1,21 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+// Endereço I2C comum: 0x27 ou 0x3F. Altere se necessário.
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void setup() {
+  lcd.init();           // Inicializa o LCD
+  lcd.backlight();      // Liga a luz de fundo
+
+  lcd.setCursor(0, 0);  // Coluna 0, linha 0
+  lcd.print("Robotica Educacional");
+
+  lcd.setCursor(0, 1);  // Coluna 0, linha 1
+  lcd.print("Display I2C LCD");
+}
+
+void loop() {
+  lcd.scrollDisplayLeft();
+  delay(500);
+}
