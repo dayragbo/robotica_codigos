@@ -1,0 +1,45 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+// Variáveis de tempo falso
+int horas = 14;
+int minutos = 23;
+int segundos = 45;
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 1);
+  lcd.print("Relogio Fake :)");
+}
+
+void loop() {
+  // Mostra hora no formato HH:MM:SS
+  lcd.setCursor(0, 0);
+  if (horas < 10) lcd.print("0");
+  lcd.print(horas);
+  lcd.print(":");
+  if (minutos < 10) lcd.print("0");
+  lcd.print(minutos);
+  lcd.print(":");
+  if (segundos < 10) lcd.print("0");
+  lcd.print(segundos);
+
+  delay(1000); // Espera 1 segundo
+
+  // Incrementa os segundos
+  segundos++;
+  if (segundos >= 60) {
+    segundos = 0;
+    minutos++;
+  }
+  if (minutos >= 60) {
+    minutos = 0;
+    horas++;
+  }
+  if (horas >= 24) {
+    horas = 0;
+  }
+}
